@@ -8,7 +8,8 @@ class TimeInpt extends Component {
     super(props);
 
     this.state = {
-      editIndex: -1
+      editIndex: -1,
+      ampm: 'AM'
     };
 
     this.onHourClick = this.onHourClick.bind(this);
@@ -55,6 +56,8 @@ class TimeInpt extends Component {
   }
 
   onKeyDown(evt) {
+    console.log(evt.key);
+
     switch(evt.key) {
     case 'ArrowLeft':
       this.setState({
@@ -66,7 +69,32 @@ class TimeInpt extends Component {
         editIndex: (this.state.editIndex + 1) % 4
       });
       break;
+    default:
+      this.handleKey(evt.key);
     }
+  }
+
+  handleKey(key) {
+    switch(this.state.editIndex) {
+    case 3:
+      this.handleKeyAmpm(key);
+      break;
+    }
+  }
+
+  handleKeyAmpm(key) {
+    let newAmpm = this.state.ampm;
+    if (key === 'ArrowUp' || key === 'ArrowDown') {
+      newAmpm = this.state.ampm === 'AM' ? 'PM' : 'AM';
+    } else if (key === 'a' || key === 'A') {
+      newAmpm = 'AM';
+    } else if (key === 'p' || key === 'P') {
+      newAmpm = 'PM';
+    }
+
+    this.setState({
+      ampm: newAmpm
+    });
   }
 
   render() {
@@ -94,7 +122,7 @@ class TimeInpt extends Component {
           <span className={minuteCls} onClick={this.onMinuteClick}>00</span>
           <span className="TimeInpt-colon">:</span>
           <span className={secondCls} onClick={this.onSecondClick}>00</span>
-          <span className={ampmCls} onClick={this.onAmpmClick}>AM</span>
+          <span className={ampmCls} onClick={this.onAmpmClick}>{this.state.ampm}</span>
         </span>
       </span>
     );

@@ -3,6 +3,7 @@
 
     padding: 2px;
     user-select: none;
+    outline: none;
 }
 
 .TimeInpt-colon {
@@ -11,7 +12,7 @@
 }
 
 .TimeInpt--selected {
-    background: cyan;
+    background: #badef4;
 }
 
 .TimeInpt-ampm {
