@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <div className="App">
         once update a time &nbsp;
-        <TimeInput />
+        <TimeInput onChangeCallback={(time) => { console.log(time); }}/>
         &nbsp; wants to compare with b time &nbsp;
         <input type="time" />
       </div>

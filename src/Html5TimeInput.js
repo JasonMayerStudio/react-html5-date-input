@@ -29,6 +29,16 @@ class TimeInpt extends Component {
     this.onBlur = this.onBlur.bind(this);
   }
 
+  componentDidUpdate() {
+    if (this.props.onChangeCallback) {
+      const time = `${this.getHour()}:${this.getMinute()}:${this.getSecond()} ${this.getAmpm()}`;
+      if (!this.time || this.time !== time) {
+        this.props.onChangeCallback(time);
+        this.time = time;
+      }
+    }
+  }
+
   onHourClick(evt) {
     evt.stopPropagation();
     evt.preventDefault();
@@ -97,8 +107,6 @@ class TimeInpt extends Component {
   }
 
   onKeyDown(evt) {
-    console.log(evt.key);
-    
     let editIndex = this.state.editIndex;
 
     if (evt.key === 'Tab') {
@@ -399,6 +407,41 @@ class TimeInpt extends Component {
     });
   }
 
+  getHour() {
+    let hour = Math.floor(this.state.sec / HOUR);
+    if (hour > 12) {
+      hour -= 12;
+    }
+    hour = hour.toString();
+    if (hour.length < 2) {
+      hour = '0' + hour;
+    }
+
+    return hour;
+  }
+
+  getMinute() {
+    let minute = (Math.floor((this.state.sec % HOUR) / MINUTE)).toString();
+    if (minute.length === 1) {
+      minute = '0' + minute;
+    }
+
+    return minute;
+  }
+
+  getSecond() {
+    let second = (this.state.sec % 60).toString();
+    if (second.length === 1) {
+      second = '0' + second;
+    }
+
+    return second;
+  }
+
+  getAmpm() {
+    return this.state.sec < HALF_DAY ? 'AM' : 'PM';
+  }
+
   render() {
     const hourCls = classNames('TimeInpt-hour', {
       'TimeInpt--selected': this.state.editIndex === 0
@@ -416,36 +459,15 @@ class TimeInpt extends Component {
       'TimeInpt--selected': this.state.editIndex === 3
     });
 
-    let hour = Math.floor(this.state.sec / HOUR);
-    if (hour > 12) {
-      hour -= 12;
-    }
-    hour = hour.toString();
-    if (hour.length < 2) {
-      hour = '0' + hour;
-    }
-
-    let minute = (Math.floor((this.state.sec % HOUR) / MINUTE)).toString();
-    if (minute.length === 1) {
-      minute = '0' + minute;
-    }
-
-    let second = (this.state.sec % 60).toString();
-    if (second.length === 1) {
-      second = '0' + second;
-    }
-
-    let ampm = this.state.sec < HALF_DAY ? 'AM' : 'PM';
-
     return (
-      <span className="TimeInpt" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onFocus={this.onFocus} onBlur={this.onBlur} onChange={() => {}}>
+      <span className="TimeInpt" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onFocus={this.onFocus} onBlur={this.onBlur}>
         <span contentEditable={false}>
-          <span className={hourCls} onClickCapture={this.onHourClick}>{hour}</span>
+          <span className={hourCls} onClickCapture={this.onHourClick}>{this.getHour()}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={minuteCls} onClickCapture={this.onMinuteClick}>{minute}</span>
+          <span className={minuteCls} onClickCapture={this.onMinuteClick}>{this.getMinute()}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={secondCls} onClickCapture={this.onSecondClick}>{second}</span>
-          <span className={ampmCls} onClickCapture={this.onAmpmClick}>{ampm}</span>
+          <span className={secondCls} onClickCapture={this.onSecondClick}>{this.getSecond()}</span>
+          <span className={ampmCls} onClickCapture={this.onAmpmClick}>{this.getAmpm()}</span>
         </span>
       </span>
     );
