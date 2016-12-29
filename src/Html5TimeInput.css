@@ -1,0 +1,18 @@
+.TimeInpt {
+    border: 1px solid #222;
+
+    padding: 2px;
+}
+
+.TimeInpt-colon {
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.TimeInpt--selected {
+    background: cyan;
+}
+
+.TimeInpt-ampm {
+    margin-left: 5px;
+}
