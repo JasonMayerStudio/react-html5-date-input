@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 import './Html5TimeInput.css';
@@ -14,7 +14,7 @@ class TimeInpt extends Component {
 
     this.state = {
       editIndex: -1,
-      sec: 0,
+      sec: props.sec || 0,
       hourWaitFor2ndNum: false,
       minuteWaitFor2ndNum: false,
       secondWaitFor2ndNum: false
@@ -473,5 +473,10 @@ class TimeInpt extends Component {
     );
   }
 }
+
+TimeInpt.propTyps = {
+  sec: PropTypes.number,
+  onChangeCallback: PropTypes.func
+};
 
 export default TimeInpt;
