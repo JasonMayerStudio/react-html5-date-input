@@ -2,6 +2,7 @@
     border: 1px solid #222;
 
     padding: 2px;
+    user-select: none;
 }
 
 .TimeInpt-colon {
