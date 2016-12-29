@@ -75,6 +75,24 @@ class TimeInpt extends Component {
   onKeyDown(evt) {
     console.log(evt.key);
 
+    if (evt.key === 'Tab') {
+      let editIndex = this.state.editIndex;
+      editIndex += 1;
+      if (editIndex === 4) {
+        editIndex = -1;
+      } else {
+        evt.stopPropagation();
+        evt.preventDefault();
+      }
+      this.setState({
+        editIndex,
+        hourWaitFor2ndNum: false,
+        minuteWaitFor2ndNum: false,
+        secondWaitFor2ndNum: false
+      });
+      return;
+    }
+
     evt.stopPropagation();
     evt.preventDefault();
 
