@@ -233,6 +233,9 @@ class TimeInpt extends Component {
       } else {
         newSec += (this.state.sec % ALL_DAY - this.state.sec % HOUR) * 9;
         newSec += parseInt(key, 10) * HOUR;
+        if (newSec === 12 * HOUR) {
+          newSec = 0;
+        }
       }
       moveToNext = true;
       break;
@@ -417,6 +420,9 @@ class TimeInpt extends Component {
       hour = '0' + hour;
     }
 
+    if (hour === '00') {
+      hour = '12';
+    }
     return hour;
   }
 
