@@ -84,6 +84,12 @@ class TimeInpt extends Component {
     case 0:
       this.handleKeyHour(key);
       break;
+    case 1:
+      this.handleKeyMinute(key);
+      break;
+    case 2:
+      this.handleKeySecond(key);
+      break;
     case 3:
       this.handleKeyAmpm(key);
       break;
@@ -98,6 +104,44 @@ class TimeInpt extends Component {
       break;
     case 'ArrowDown':
       newSec -= HOUR;
+      break;
+    }
+
+    newSec += ALL_DAY;
+    newSec %= ALL_DAY;
+
+    this.setState({
+      sec: newSec
+    });
+  }
+
+  handleKeyMinute(key) {
+    let newSec = this.state.sec;
+    switch(key) {
+    case 'ArrowUp':
+      newSec += MINUTE;
+      break;
+    case 'ArrowDown':
+      newSec -= MINUTE;
+      break;
+    }
+
+    newSec += ALL_DAY;
+    newSec %= ALL_DAY;
+
+    this.setState({
+      sec: newSec
+    });
+  }
+
+  handleKeySecond(key) {
+    let newSec = this.state.sec;
+    switch(key) {
+    case 'ArrowUp':
+      newSec += 1;
+      break;
+    case 'ArrowDown':
+      newSec -= 1;
       break;
     }
 
@@ -142,13 +186,23 @@ class TimeInpt extends Component {
       'TimeInpt--selected': this.state.editIndex === 3
     });
 
-    let hour = this.state.sec / HOUR;
+    let hour = Math.floor(this.state.sec / HOUR);
     if (hour > 12) {
       hour -= 12;
     }
     hour = hour.toString();
     if (hour.length < 2) {
       hour = '0' + hour;
+    }
+
+    let minute = (Math.floor((this.state.sec % HOUR) / MINUTE)).toString();
+    if (minute.length === 1) {
+      minute = '0' + minute;
+    }
+
+    let second = (this.state.sec % 60).toString();
+    if (second.length === 1) {
+      second = '0' + second;
     }
 
     let ampm = this.state.sec < HALF_DAY ? 'AM' : 'PM';
@@ -158,9 +212,9 @@ class TimeInpt extends Component {
         <span contentEditable={false}>
           <span className={hourCls} onClick={this.onHourClick}>{hour}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={minuteCls} onClick={this.onMinuteClick}>00</span>
+          <span className={minuteCls} onClick={this.onMinuteClick}>{minute}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={secondCls} onClick={this.onSecondClick}>00</span>
+          <span className={secondCls} onClick={this.onSecondClick}>{second}</span>
           <span className={ampmCls} onClick={this.onAmpmClick}>{ampm}</span>
         </span>
       </span>
