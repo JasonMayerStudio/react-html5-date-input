@@ -8,12 +8,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        Hello, once upon a time:
+        once update a time &nbsp;
         <TimeInput />
-        and b time,
-        <TimeInput />
-        and your name?
-        <input type="text" />
+        &nbsp; wants to compare with b time &nbsp;
+        <input type="time" />
       </div>
     );
   }

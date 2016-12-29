@@ -1,9 +1,11 @@
 .TimeInpt {
-    border: 1px solid #222;
+    border: 1px solid #c8c8c8;
 
     padding: 2px;
     user-select: none;
-    outline: none;
+    /*outline: none;*/
+
+    font-family: monospace;
 }
 
 .TimeInpt-colon {
@@ -16,5 +18,5 @@
 }
 
 .TimeInpt-ampm {
-    margin-left: 5px;
+    margin-left: 7px;
 }

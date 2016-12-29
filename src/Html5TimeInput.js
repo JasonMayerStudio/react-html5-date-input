@@ -25,6 +25,8 @@ class TimeInpt extends Component {
     this.onSecondClick = this.onSecondClick.bind(this);
     this.onAmpmClick = this.onAmpmClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
   }
 
   onHourClick(evt) {
@@ -72,11 +74,34 @@ class TimeInpt extends Component {
     });
   }
 
+  onFocus(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    if (this.state.editIndex === -1) {
+      this.setState({
+        editIndex: 0
+      });
+    }
+  }
+
+  onBlur(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    if (this.state.editIndex !== -1) {
+      this.setState({
+        editIndex: -1
+      });
+    }
+  }
+
   onKeyDown(evt) {
     console.log(evt.key);
+    
+    let editIndex = this.state.editIndex;
 
     if (evt.key === 'Tab') {
-      let editIndex = this.state.editIndex;
       editIndex += 1;
       if (editIndex === 4) {
         editIndex = -1;
@@ -99,7 +124,7 @@ class TimeInpt extends Component {
     switch(evt.key) {
     case 'ArrowLeft':
       this.setState({
-        editIndex: (this.state.editIndex + 3) % 4,
+        editIndex: editIndex === 0 ? editIndex : editIndex - 1,
         hourWaitFor2ndNum: false,
         minuteWaitFor2ndNum: false,
         secondWaitFor2ndNum: false
@@ -107,7 +132,7 @@ class TimeInpt extends Component {
       break;
     case 'ArrowRight':
       this.setState({
-        editIndex: (this.state.editIndex + 1) % 4,
+        editIndex: editIndex === 3 ? 3 : editIndex + 1,
         hourWaitFor2ndNum: false,
         minuteWaitFor2ndNum: false,
         secondWaitFor2ndNum: false
@@ -133,7 +158,6 @@ class TimeInpt extends Component {
       }
       if (this.state.editIndex === 0) {
         this.setState({
-          editIndex: -1,
           sec: this.state.sec % HOUR
         });
       }
@@ -414,14 +438,14 @@ class TimeInpt extends Component {
     let ampm = this.state.sec < HALF_DAY ? 'AM' : 'PM';
 
     return (
-      <span className="TimeInpt" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onChange={() => {}}>
+      <span className="TimeInpt" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onFocus={this.onFocus} onBlur={this.onBlur} onChange={() => {}}>
         <span contentEditable={false}>
-          <span className={hourCls} onClick={this.onHourClick}>{hour}</span>
+          <span className={hourCls} onClickCapture={this.onHourClick}>{hour}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={minuteCls} onClick={this.onMinuteClick}>{minute}</span>
+          <span className={minuteCls} onClickCapture={this.onMinuteClick}>{minute}</span>
           <span className="TimeInpt-colon">:</span>
-          <span className={secondCls} onClick={this.onSecondClick}>{second}</span>
-          <span className={ampmCls} onClick={this.onAmpmClick}>{ampm}</span>
+          <span className={secondCls} onClickCapture={this.onSecondClick}>{second}</span>
+          <span className={ampmCls} onClickCapture={this.onAmpmClick}>{ampm}</span>
         </span>
       </span>
     );
