@@ -14,7 +14,10 @@ class TimeInpt extends Component {
 
     this.state = {
       editIndex: -1,
-      sec: 0
+      sec: 0,
+      hourWaitFor2ndNum: false,
+      minuteWaitFor2ndNum: false,
+      secondWaitFor2ndNum: false
     };
 
     this.onHourClick = this.onHourClick.bind(this);
@@ -29,7 +32,9 @@ class TimeInpt extends Component {
     evt.preventDefault();
 
     this.setState({
-      editIndex: 0
+      editIndex: 0,
+      minuteWaitFor2ndNum: false,
+      secondWaitFor2ndNum: false
     });
   }
 
@@ -38,7 +43,9 @@ class TimeInpt extends Component {
     evt.preventDefault();
 
     this.setState({
-      editIndex: 1
+      editIndex: 1,
+      hourWaitFor2ndNum: false,
+      secondWaitFor2ndNum: false
     });
   }
 
@@ -47,7 +54,9 @@ class TimeInpt extends Component {
     evt.preventDefault();
 
     this.setState({
-      editIndex: 2
+      editIndex: 2,
+      hourWaitFor2ndNum: false,
+      minuteWaitFor2ndNum: false
     });
   }
 
@@ -56,7 +65,10 @@ class TimeInpt extends Component {
     evt.preventDefault();
 
     this.setState({
-      editIndex: 3
+      editIndex: 3,
+      hourWaitFor2ndNum: false,
+      minuteWaitFor2ndNum: false,
+      secondWaitFor2ndNum: false
     });
   }
 
@@ -69,12 +81,18 @@ class TimeInpt extends Component {
     switch(evt.key) {
     case 'ArrowLeft':
       this.setState({
-        editIndex: (this.state.editIndex + 3) % 4
+        editIndex: (this.state.editIndex + 3) % 4,
+        hourWaitFor2ndNum: false,
+        minuteWaitFor2ndNum: false,
+        secondWaitFor2ndNum: false
       });
       break;
     case 'ArrowRight':
       this.setState({
-        editIndex: (this.state.editIndex + 1) % 4
+        editIndex: (this.state.editIndex + 1) % 4,
+        hourWaitFor2ndNum: false,
+        minuteWaitFor2ndNum: false,
+        secondWaitFor2ndNum: false
       });
       break;
     default:
@@ -139,6 +157,9 @@ class TimeInpt extends Component {
 
   handleKeySecond(key) {
     let newSec = this.state.sec;
+    let moveToNext = false;
+    let wait = false;
+
     switch(key) {
     case 'ArrowUp':
       newSec += 1;
@@ -146,13 +167,55 @@ class TimeInpt extends Component {
     case 'ArrowDown':
       newSec -= 1;
       break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+      if (!this.state.secondWaitFor2ndNum) {
+        newSec -= this.state.sec % 60;
+        newSec += parseInt(key);
+        wait = true;
+      } else {
+        let seconds = (this.state.sec % 60) * 10 + parseInt(key);
+        newSec -= this.state.sec % 60;
+        newSec += seconds;
+        wait = false;
+        moveToNext = true;
+      }
+      break;
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      if (!this.state.secondWaitFor2ndNum) {
+        newSec -= this.state.sec % 60;
+        newSec += parseInt(key);
+      } else {
+        let seconds = (this.state.sec % 60) * 10 + parseInt(key);
+        newSec -= this.state.sec % 60;
+        newSec += seconds;
+      }
+      moveToNext = true;
     }
 
     newSec += ALL_DAY;
     newSec %= ALL_DAY;
 
+    let newEditIndex = this.state.editIndex;
+    if (moveToNext) {
+      newEditIndex += 1;
+
+      if (newEditIndex > 3) {
+        newEditIndex = -1;
+      }
+    }
+
     this.setState({
-      sec: newSec
+      sec: newSec,
+      editIndex: newEditIndex,
+      secondWaitFor2ndNum: wait
     });
   }
 
