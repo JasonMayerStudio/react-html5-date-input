@@ -8,7 +8,7 @@ const HOUR = 60 * MINUTE;
 const ALL_DAY = 24 * HOUR;
 const HALF_DAY = ALL_DAY / 2;
 
-class TimeInpt extends Component {
+class TimeInput extends Component {
   constructor(props) {
     super(props);
 
@@ -129,7 +129,7 @@ class TimeInpt extends Component {
     evt.stopPropagation();
     evt.preventDefault();
 
-    switch(evt.key) {
+    switch (evt.key) {
     case 'ArrowLeft':
       this.setState({
         editIndex: editIndex === 0 ? editIndex : editIndex - 1,
@@ -176,7 +176,7 @@ class TimeInpt extends Component {
   }
 
   handleKey(key) {
-    switch(this.state.editIndex) {
+    switch (this.state.editIndex) {
     case 0:
       this.handleKeyHour(key);
       break;
@@ -199,7 +199,7 @@ class TimeInpt extends Component {
     let moveToNext = false;
     let wait = false;
 
-    switch(key) {
+    switch (key) {
     case 'ArrowUp':
       newSec += HOUR;
       break;
@@ -267,7 +267,7 @@ class TimeInpt extends Component {
     let moveToNext = false;
     let wait = false;
 
-    switch(key) {
+    switch (key) {
     case 'ArrowUp':
       newSec += MINUTE;
       break;
@@ -332,7 +332,7 @@ class TimeInpt extends Component {
     let moveToNext = false;
     let wait = false;
 
-    switch(key) {
+    switch (key) {
     case 'ArrowUp':
       newSec += 1;
       break;
@@ -449,29 +449,29 @@ class TimeInpt extends Component {
   }
 
   render() {
-    const hourCls = classNames('TimeInpt-hour', {
-      'TimeInpt--selected': this.state.editIndex === 0
+    const hourCls = classNames('TimeInput-hour', {
+      'TimeInput--selected': this.state.editIndex === 0
     });
 
-    const minuteCls = classNames('TimeInpt-minute', {
-      'TimeInpt--selected': this.state.editIndex === 1
+    const minuteCls = classNames('TimeInput-minute', {
+      'TimeInput--selected': this.state.editIndex === 1
     });
 
-    const secondCls = classNames('TimeInpt-second', {
-      'TimeInpt--selected': this.state.editIndex === 2
+    const secondCls = classNames('TimeInput-second', {
+      'TimeInput--selected': this.state.editIndex === 2
     });
 
-    const ampmCls = classNames('TimeInpt-ampm', {
-      'TimeInpt--selected': this.state.editIndex === 3
+    const ampmCls = classNames('TimeInput-ampm', {
+      'TimeInput--selected': this.state.editIndex === 3
     });
 
     return (
-      <span className="TimeInpt" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onFocus={this.onFocus} onBlur={this.onBlur}>
+      <span className="TimeInput" contentEditable={true} suppressContentEditableWarning onKeyDown={this.onKeyDown} onFocus={this.onFocus} onBlur={this.onBlur}>
         <span contentEditable={false}>
           <span className={hourCls} onClickCapture={this.onHourClick}>{this.getHour()}</span>
-          <span className="TimeInpt-colon">:</span>
+          <span className="TimeInput-colon">:</span>
           <span className={minuteCls} onClickCapture={this.onMinuteClick}>{this.getMinute()}</span>
-          <span className="TimeInpt-colon">:</span>
+          <span className="TimeInput-colon">:</span>
           <span className={secondCls} onClickCapture={this.onSecondClick}>{this.getSecond()}</span>
           <span className={ampmCls} onClickCapture={this.onAmpmClick}>{this.getAmpm()}</span>
         </span>
@@ -480,9 +480,9 @@ class TimeInpt extends Component {
   }
 }
 
-TimeInpt.propTyps = {
+TimeInput.propTyps = {
   sec: PropTypes.number,
   onChangeCallback: PropTypes.func
 };
 
-export default TimeInpt;
+export default TimeInput;
