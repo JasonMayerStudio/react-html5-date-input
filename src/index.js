@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import TimeInput from './Html5TimeInput';
+
 import './index.css';
 
 ReactDOM.render(
-  <App />,
+  <div className="App">
+    once update a time &nbsp;
+    <TimeInput onChangeCallback={(time) => { console.log(time); }}/>
+    &nbsp; wants to compare with b time &nbsp;
+    <input type="time" />
+  </div>,
   document.getElementById('root')
 );
