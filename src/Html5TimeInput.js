@@ -138,6 +138,9 @@ class TimeInpt extends Component {
 
   handleKeyMinute(key) {
     let newSec = this.state.sec;
+    let moveToNext = false;
+    let wait = false;
+
     switch(key) {
     case 'ArrowUp':
       newSec += MINUTE;
@@ -145,13 +148,53 @@ class TimeInpt extends Component {
     case 'ArrowDown':
       newSec -= MINUTE;
       break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+      if (!this.state.minuteWaitFor2ndNum) {
+        newSec -= this.state.sec % HOUR - this.state.sec % MINUTE;
+        newSec += parseInt(key) * MINUTE;
+        wait = true;
+      } else {
+        newSec += (this.state.sec % HOUR - this.state.sec % MINUTE) * 9;
+        newSec += parseInt(key) * MINUTE;
+        wait = false;
+        moveToNext = true;
+      }
+      break;
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      if (!this.state.secondWaitFor2ndNum) {
+        newSec -= this.state.sec % HOUR - this.state.sec % MINUTE;
+        newSec += parseInt(key) * MINUTE;
+      } else {
+        newSec += (this.state.sec % HOUR - this.state.sec % MINUTE) * 9;
+        newSec += parseInt(key) * MINUTE;
+      }
+      moveToNext = true;
     }
 
     newSec += ALL_DAY;
     newSec %= ALL_DAY;
 
+    let newEditIndex = this.state.editIndex;
+    if (moveToNext) {
+      newEditIndex += 1;
+
+      if (newEditIndex > 3) {
+        newEditIndex = -1;
+      }
+    }
+
     this.setState({
-      sec: newSec
+      sec: newSec,
+      editIndex: newEditIndex,
+      minuteWaitFor2ndNum: wait
     });
   }
 
