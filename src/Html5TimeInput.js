@@ -95,6 +95,31 @@ class TimeInpt extends Component {
         secondWaitFor2ndNum: false
       });
       break;
+    case 'Backspace':
+      if (this.state.editIndex === 3) {
+        this.setState({
+          editIndex: 2
+        });
+      }
+      if (this.state.editIndex === 2) {
+        this.setState({
+          editIndex: 1,
+          sec: this.state.sec - this.state.sec % MINUTE
+        });
+      }
+      if (this.state.editIndex === 1) {
+        this.setState({
+          editIndex: 0,
+          sec: this.state.sec - this.state.sec % HOUR + this.state.sec % MINUTE
+        });
+      }
+      if (this.state.editIndex === 0) {
+        this.setState({
+          editIndex: -1,
+          sec: this.state.sec % HOUR
+        });
+      }
+      break;
     default:
       this.handleKey(evt.key);
     }
