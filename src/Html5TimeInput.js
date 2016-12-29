@@ -63,6 +63,9 @@ class TimeInpt extends Component {
   onKeyDown(evt) {
     console.log(evt.key);
 
+    evt.stopPropagation();
+    evt.preventDefault();
+
     switch(evt.key) {
     case 'ArrowLeft':
       this.setState({
