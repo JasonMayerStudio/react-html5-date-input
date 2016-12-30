@@ -88,11 +88,14 @@ class TimeInput extends Component {
     evt.stopPropagation();
     evt.preventDefault();
 
-    if (this.state.editIndex === -1) {
-      this.setState({
-        editIndex: 0
-      });
-    }
+    // so that it's after onClick
+    setTimeout(() => {
+      if (this.state.editIndex === -1) {
+        this.setState({
+          editIndex: 0
+        });
+      }
+    }, 100);
   }
 
   onBlur(evt) {
