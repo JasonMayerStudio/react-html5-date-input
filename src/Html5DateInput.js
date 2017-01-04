@@ -232,6 +232,7 @@ class DateInput extends Component {
 
     this.setState({
       month: newMonth,
+      day: this.adjustDay(this.state.year, newMonth, this.state.day),
       editIndex: newEditIndex,
       monthWaitFor2ndNum: wait
     });
@@ -281,7 +282,7 @@ class DateInput extends Component {
       return;
     }
 
-    newDay = this.adjustDay(newDay);
+    newDay = this.adjustDay(this.state.year, this.state.month, newDay);
 
     let newEditIndex = this.state.editIndex;
     if (moveToNext) {
@@ -299,16 +300,16 @@ class DateInput extends Component {
     });
   }
 
-  adjustDay(day) {
+  adjustDay(year, month, day) {
     let d = Math.max(0, day);
     d = Math.min(d, 30);
 
-    if (['04', '06', '09', '11'].indexOf(this.getMonth()) >= 0) {
+    if ([4, 6, 9, 11].indexOf(month + 1) >= 0) {
       d = Math.min(d, 29);
     }
 
-    if (this.getMonth() === '02') {
-      if (this.isLeapYear()) {
+    if (month === 1) {
+      if (this.isLeapYear(year)) {
         d = Math.min(d, 28);
       } else {
         d = Math.min(d, 27);
@@ -318,8 +319,8 @@ class DateInput extends Component {
     return d;
   }
 
-  isLeapYear() {
-    return this.state.year % 4 === 0 && this.state.year % 400 !== 0;
+  isLeapYear(year) {
+    return year % 4 === 0 && year % 400 !== 0;
   }
 
   handleKeyYear(key) {
@@ -368,6 +369,7 @@ class DateInput extends Component {
     this.setState({
       year: newYear,
       yearInputCnt: inputCnt,
+      day: this.adjustDay(newYear, this.state.month, this.state.day),
       editIndex: newEditIndex
     });
   }
