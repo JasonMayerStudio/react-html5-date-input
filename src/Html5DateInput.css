@@ -1,4 +1,4 @@
-.TimeInput {
+.DateInput {
     border: 1px solid #c8c8c8;
 
     padding: 2px;
@@ -8,15 +8,11 @@
     font-family: monospace;
 }
 
-.TimeInput-colon {
+.DateInput-colon {
     margin-left: 2px;
     margin-right: 2px;
 }
 
-.TimeInput--selected {
+.DateInput--selected {
     background: #badef4;
-}
-
-.TimeInput-ampm {
-    margin-left: 7px;
 }
