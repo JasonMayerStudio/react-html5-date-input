@@ -238,68 +238,88 @@ class DateInput extends Component {
   }
 
   handleKeyDay(key) {
-    // let newSec = this.state.sec;
-    // let moveToNext = false;
-    // let wait = false;
+    let newDay = this.state.day;
+    let moveToNext = false;
+    let wait = false;
 
-    // switch (key) {
-    // case 'ArrowUp':
-    //   newSec += MINUTE;
-    //   break;
-    // case 'ArrowDown':
-    //   newSec -= MINUTE;
-    //   break;
-    // case '0':
-    // case '1':
-    // case '2':
-    // case '3':
-    // case '4':
-    // case '5':
-    //   if (!this.state.dayWaitFor2ndNum) {
-    //     newSec -= this.state.sec % HOUR - this.state.sec % MINUTE;
-    //     newSec += parseInt(key, 10) * MINUTE;
-    //     wait = true;
-    //   } else {
-    //     newSec += (this.state.sec % HOUR - this.state.sec % MINUTE) * 9;
-    //     newSec += parseInt(key, 10) * MINUTE;
-    //     wait = false;
-    //     moveToNext = true;
-    //   }
-    //   break;
-    // case '6':
-    // case '7':
-    // case '8':
-    // case '9':
-    //   if (!this.state.yearWaitFor2ndNum) {
-    //     newSec -= this.state.sec % HOUR - this.state.sec % MINUTE;
-    //     newSec += parseInt(key, 10) * MINUTE;
-    //   } else {
-    //     newSec += (this.state.sec % HOUR - this.state.sec % MINUTE) * 9;
-    //     newSec += parseInt(key, 10) * MINUTE;
-    //   }
-    //   moveToNext = true;
-    //   break;
-    // default:
-    //   return;
-    // }
+    switch (key) {
+    case 'ArrowUp':
+      newDay += 1;
+      break;
+    case 'ArrowDown':
+      newDay -= 1;
+      break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+      if (!this.state.dayWaitFor2ndNum) {
+        newDay = parseInt(key, 10) - 1;
+        wait = true;
+      } else {
+        newDay = (newDay + 1) * 10 - 1;
+        newDay += parseInt(key, 10);
+        wait = false;
+        moveToNext = true;
+      }
+      break;
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      if (!this.state.dayWaitFor2ndNum) {
+        newDay = parseInt(key, 10) - 1;
+      } else {
+        newDay = (newDay + 1) * 10 - 1;
+        newDay += parseInt(key, 10);
+      }
+      moveToNext = true;
+      break;
+    default:
+      return;
+    }
 
-    // newSec += ALL_DAY;
-    // newSec %= ALL_DAY;
+    newDay = this.adjustDay(newDay);
 
-    // let newEditIndex = this.state.editIndex;
-    // if (moveToNext) {
-    //   newEditIndex += 1;
+    let newEditIndex = this.state.editIndex;
+    if (moveToNext) {
+      newEditIndex += 1;
 
-    //   if (newEditIndex > 3) {
-    //     newEditIndex = -1;
-    //   }
-    // }
+      if (newEditIndex > 2) {
+        newEditIndex = -1;
+      }
+    }
 
-    // this.setState({
-    //   sec: newSec,
-    //   editIndex: newEditIndex,
-    //   minuteWaitFor2ndNum: wait
-    // });
+    this.setState({
+      day: newDay,
+      editIndex: newEditIndex,
+      dayWaitFor2ndNum: wait
+    });
+  }
+
+  adjustDay(day) {
+    let d = Math.max(0, day);
+    d = Math.min(d, 30);
+
+    if (['04', '06', '09', '11'].indexOf(this.getMonth()) >= 0) {
+      d = Math.min(d, 29);
+    }
+
+    if (this.getMonth() === '02') {
+      if (this.isLeapYear()) {
+        d = Math.min(d, 28);
+      } else {
+        d = Math.min(d, 27);
+      }
+    }
+
+    return d;
+  }
+
+  isLeapYear() {
+    return this.state.year % 4 === 0 && this.state.year % 400 !== 0;
   }
 
   handleKeyYear(key) {
@@ -335,7 +355,7 @@ class DateInput extends Component {
       inputCnt += 1;
       if (inputCnt == 4) {
         inputCnt = 0;
-        newEditIndex = -1;
+        newEditIndex = 0;
       }
       break;
     default:
