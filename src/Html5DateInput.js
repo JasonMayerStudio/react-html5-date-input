@@ -14,7 +14,7 @@ class DateInput extends Component {
       day: props.day || 0,
       monthWaitFor2ndNum: false,
       dayWaitFor2ndNum: false,
-      yearWaitFor2ndNum: false
+      yearInputCnt: 0
     };
 
     this.onMonthClick = this.onMonthClick.bind(this);
@@ -42,7 +42,7 @@ class DateInput extends Component {
     this.setState({
       editIndex: 0,
       dayWaitFor2ndNum: false,
-      yearWaitFor2ndNum: false
+      yearInputCnt: 0
     });
   }
 
@@ -53,7 +53,7 @@ class DateInput extends Component {
     this.setState({
       editIndex: 1,
       monthWaitFor2ndNum: false,
-      yearWaitFor2ndNum: false
+      yearInputCnt: 0
     });
   }
 
@@ -108,7 +108,7 @@ class DateInput extends Component {
         editIndex,
         monthWaitFor2ndNum: false,
         dayWaitFor2ndNum: false,
-        yearWaitFor2ndNum: false
+        yearInputCnt: 0
       });
       return;
     }
@@ -122,7 +122,7 @@ class DateInput extends Component {
         editIndex: editIndex === 0 ? editIndex : editIndex - 1,
         monthWaitFor2ndNum: false,
         dayWaitFor2ndNum: false,
-        yearWaitFor2ndNum: false
+        yearInputCnt: 0
       });
       break;
     case 'ArrowRight':
@@ -130,7 +130,7 @@ class DateInput extends Component {
         editIndex: editIndex === 2 ? 2 : editIndex + 1,
         monthWaitFor2ndNum: false,
         dayWaitFor2ndNum: false,
-        yearWaitFor2ndNum: false
+        yearInputCnt: 0
       });
       break;
     case 'Backspace':
@@ -303,70 +303,53 @@ class DateInput extends Component {
   }
 
   handleKeyYear(key) {
-    // let newSec = this.state.sec;
-    // let moveToNext = false;
-    // let wait = false;
+    let newYear = this.state.year;
+    let moveToNext = false;
+    let inputCnt = this.state.yearInputCnt;
+    let newEditIndex = this.state.editIndex;
 
-    // switch (key) {
-    // case 'ArrowUp':
-    //   newSec += 1;
-    //   break;
-    // case 'ArrowDown':
-    //   newSec -= 1;
-    //   break;
-    // case '0':
-    // case '1':
-    // case '2':
-    // case '3':
-    // case '4':
-    // case '5':
-    //   if (!this.state.yearWaitFor2ndNum) {
-    //     newSec -= this.state.sec % 60;
-    //     newSec += parseInt(key, 10);
-    //     wait = true;
-    //   } else {
-    //     let seconds = (this.state.sec % 60) * 10 + parseInt(key, 10);
-    //     newSec -= this.state.sec % 60;
-    //     newSec += seconds;
-    //     wait = false;
-    //     moveToNext = true;
-    //   }
-    //   break;
-    // case '6':
-    // case '7':
-    // case '8':
-    // case '9':
-    //   if (!this.state.yearWaitFor2ndNum) {
-    //     newSec -= this.state.sec % 60;
-    //     newSec += parseInt(key, 10);
-    //   } else {
-    //     let seconds = (this.state.sec % 60) * 10 + parseInt(key, 10);
-    //     newSec -= this.state.sec % 60;
-    //     newSec += seconds;
-    //   }
-    //   moveToNext = true;
-    //   break;
-    // default:
-    //   return;
-    // }
+    switch (key) {
+    case 'ArrowUp':
+      newYear += 1;
+      inputCnt = 0;
+      break;
+    case 'ArrowDown':
+      newYear -= 1;
+      inputCnt = 0;
+      break;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      if (inputCnt == 0) {
+        newYear = 0;
+      }
+      newYear *= 10;
+      newYear += parseInt(key, 10);
+      inputCnt += 1;
+      if (inputCnt == 4) {
+        inputCnt = 0;
+        newEditIndex = -1;
+      }
+      break;
+    default:
+      return;
+    }
 
-    // newSec += ALL_DAY;
-    // newSec %= ALL_DAY;
+    newYear = Math.min(9999, newYear);
+    newYear = Math.max(0, newYear);
 
-    // let newEditIndex = this.state.editIndex;
-    // if (moveToNext) {
-    //   newEditIndex += 1;
-
-    //   if (newEditIndex > 3) {
-    //     newEditIndex = -1;
-    //   }
-    // }
-
-    // this.setState({
-    //   sec: newSec,
-    //   editIndex: newEditIndex,
-    //   secondWaitFor2ndNum: wait
-    // });
+    this.setState({
+      year: newYear,
+      yearInputCnt: inputCnt,
+      editIndex: newEditIndex
+    });
   }
 
   getMonth() {
